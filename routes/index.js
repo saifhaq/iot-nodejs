@@ -18,6 +18,17 @@ router.get('/', function(req, res, next) {
 
 });
 
+router.get('/latest', function(req, res, next) {
+
+  Temperature.findOne({}, {}, { sort: { 'date' : -1 } }, function(err, latestEntry) {
+
+    var temperature = Math.round(latestEntry.temperatureC* 100)/100; 
+    console.log(temperature);
+    res.json(temperature);
+
+  });
+
+});
 
 router.get('/temperature/:temperatureC', function(req, res, next) {
 
