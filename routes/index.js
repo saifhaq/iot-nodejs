@@ -25,7 +25,6 @@ router.get('/temperature/:temperatureC', function(req, res, next) {
 
   var newEntry = new Temperature({
     temperatureC: temperatureC,
-    date: randomDate(new Date(2019, 1, 1), new Date(2019, 12, 3))
   })
 
 
