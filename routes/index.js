@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
 
     var temperature = Math.round(latestEntry.temperatureC* 100)/100; 
     console.log(temperature);
-    res.render('index', { title: 'Express', temperature: temperature});
+    res.render('index', {temperature: temperature});
 
   });
 
@@ -36,7 +36,7 @@ router.get('/temperature/:temperatureC', function(req, res, next) {
   
     console.log(newEntry.temperatureC);
     console.log(newEntry);
-    res.render('index', {title: 'Express', temperature: newEntry.temperatureC});
+    res.render('index', {temperature: newEntry.temperatureC});
   });
 
 });
