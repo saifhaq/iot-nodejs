@@ -1,7 +1,7 @@
 var Temperature = require('../models/temperature');
 var mongoose = require('mongoose');
 
- mongoose.connect('mongodb://localhost:27017/sensors',{ useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost:27017/sensors',{ useNewUrlParser: true, useUnifiedTopology: true });
 
 
 var temperatures = 

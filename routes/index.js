@@ -1,8 +1,9 @@
 var express = require('express');
-var mongoose = require('mongoose');
-
 var router = express.Router();
+
+var mongoose = require('mongoose');
 var Temperature = require('../models/temperature');
+mongoose.connect('mongodb://localhost:27017/sensors',{ useNewUrlParser: true, useUnifiedTopology: true });
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -10,7 +11,7 @@ router.get('/', function(req, res, next) {
   Temperature.findOne({}, {}, { sort: { 'date' : -1 } }, function(err, latestEntry) {
 
     var temperature = Math.round(latestEntry.temperatureC* 100)/100; 
-    console.log(temperature)
+    console.log(temperature);
     res.render('index', { title: 'Express', temperature: temperature});
 
   });
@@ -20,20 +21,31 @@ router.get('/', function(req, res, next) {
 
 router.get('/temperature/:temperatureC', function(req, res, next) {
 
+  var temperatureC = req.params.temperatureC
+
   var newEntry = new Temperature({
-    temperatureC: req.params.temperatureC
+    temperatureC: temperatureC,
+    date: randomDate(new Date(2019, 1, 1), new Date(2019, 12, 3))
   })
+
 
   newEntry.save(function(err){
     if(err){
          console.log(err);
          return;
     }
-    console.log(newEntry.temperatureC)
-    res.redirect('/');
+  
+    console.log(newEntry.temperatureC);
+    console.log(newEntry);
+    res.render('index', {title: 'Express', temperature: newEntry.temperatureC});
   });
 
 });
+
+
+function randomDate(start, end) {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
 
 
 module.exports = router;
