@@ -27,7 +27,7 @@ router.get('/latest', function(req, res, next) {
 
     var temperature = Math.round(latestEntry.temperatureC* 100)/100; 
     console.log(temperature);
-    res.send(temperature);
+    res.json(temperature);
   });
 });
 
