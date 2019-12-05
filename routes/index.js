@@ -39,7 +39,7 @@ router.get('/latest', function(req, res, next) {
 
       var humidity = Math.round(latestEntry.humidityP* 100)/100; 
 
-      var jsonOutput = {temperature: temperature, humidity: humidity}; 
+      var jsonOutput = {"temperature": temperature, "humidity": humidity}; 
       res.json(jsonOutput);
     });
   });
