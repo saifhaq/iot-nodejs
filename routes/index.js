@@ -67,11 +67,61 @@ router.get('/latest/humidity', function(req, res, next) {
 });
 
 
+router.post('/new/:temperatureC/:humidityP', function(req, res, next){
+ 
+  var username = req.body.username; 
+  var password = req.body.password; 
+  var temperatureC = req.params.temperatureC;
+  var humidityP = req.params.humidityP;
+
+  
+  user = new User({
+    username: username,
+    password: password,
+  });
+
+  var newTemperature = new Temperature({
+    temperatureC: temperatureC,
+  })
+
+  var newHumidity = new Humidity({
+    humidityP: humidityP,
+  })
+
+  User.findOne({'username': username}, function(err, user){
+    if (err){
+      res.send("Some other error");
+    }
+    if (!user){
+      res.send("Invalid username");
+    }
+    else if (!user.validPassword(password)){
+      res.send("Wrong password");
+    }
+    else{
+      console.log("Successfully verified");
+      newTemperature.save(function(err){
+        if(err){
+             console.log(err);
+        }
+      });
+      newHumidity.save(function(err){
+        if(err){
+             console.log(err);
+        }
+      });
+      res.send("Successfully saved temperature: " + temperatureC + ", humidity: " + humidityP);
+    }
+  });
+
+  
+});
+
 router.post('/new/temperature/:temperatureC', function(req, res, next){
  
   var username = req.body.username; 
   var password = req.body.password; 
-  var temperatureC = req.params.temperatureC
+  var temperatureC = req.params.temperatureC;
 
   
   user = new User({
@@ -111,7 +161,7 @@ router.post('/new/humidity/:humidityP', function(req, res, next){
  
   var username = req.body.username; 
   var password = req.body.password; 
-  var humidityP = req.params.humidityP
+  var humidityP = req.params.humidityP;
 
   
   user = new User({
