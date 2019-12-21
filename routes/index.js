@@ -7,6 +7,7 @@ var Temperature = require('../models/temperature');
 var Humidity = require('../models/humidity');
 
 var User = require('../models/user');
+var DesiredTemperature = require('../models/desired-temp');
 
 mongoose.connect('mongodb://localhost:27017/sensors',{ useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -66,6 +67,51 @@ router.get('/latest/humidity', function(req, res, next) {
   });
 });
 
+router.get('/latest/desiredtemp', function(req, res, next) {
+
+  DesiredTemperature.findOne({name: "desiredTemp"}, {}, {}, function(err, temp) {
+
+    var desiredTemp = Math.round(temp.temperatureC* 100)/100; 
+    res.json(desiredTemp);
+  });
+});
+
+router.post('/update/desiredtemp/:tempC', function(req, res, next){
+ 
+  var username = req.body.username; 
+  var password = req.body.password; 
+  var updatedTempC = req.params.tempC;
+
+  
+  user = new User({
+    username: username,
+    password: password,
+  });
+
+
+  User.findOne({'username': username}, function(err, user){
+    if (err){
+      res.send("Some other error");
+    }
+    if (!user){
+      res.send("Invalid username");
+    }
+    else if (!user.validPassword(password)){
+      res.send("Wrong password");
+    }
+    else{
+      console.log("Successfully verified");
+
+      DesiredTemperature.findOneAndUpdate({name: "desiredTemp"}, {temperatureC: updatedTempC}, {}, function(err, temp) {
+        if (err) throw err;
+        });
+
+      res.send("Successfully saved desired temperature: " + updatedTempC);
+    }
+  });
+
+  
+});
 
 router.post('/new/:temperatureC/:humidityP', function(req, res, next){
  
