@@ -17,12 +17,19 @@ router.get('/', function(req, res, next) {
   Temperature.findOne({}, {}, { sort: { 'date' : -1 } }, function(err, latestEntry) {
 
     var temperature = Math.round(latestEntry.temperatureC* 100)/100; 
-    console.log(temperature);
 
-    Humidity.findOne({}, {}, { sort: { 'date' : -1 } }, function(err, latestEntry) {
-
+    Humidity.findOne({}, {}, { sort: { 'date' : -1 } }, function(err, latestEntry) {   
+      
       var humidity = Math.round(latestEntry.humidityP* 100)/100; 
-      res.render('index', {temperature: temperature, humidity: humidity});
+
+
+      DesiredTemperature.findOne({name: "desiredTemp"}, {}, {}, function(err, temp) {
+
+        var desiredTemp = Math.round(temp.temperatureC* 100)/100; 
+
+        res.render('index', {temperature: temperature, humidity: humidity, desiredTemp: desiredTemp});
+      });
+
     });
   });
 
@@ -34,14 +41,19 @@ router.get('/latest', function(req, res, next) {
   Temperature.findOne({}, {}, { sort: { 'date' : -1 } }, function(err, latestEntry) {
 
     var temperature = Math.round(latestEntry.temperatureC* 100)/100; 
-    console.log(temperature);
 
     Humidity.findOne({}, {}, { sort: { 'date' : -1 } }, function(err, latestEntry) {
 
       var humidity = Math.round(latestEntry.humidityP* 100)/100; 
 
-      var jsonOutput = {"temperature": temperature, "humidity": humidity}; 
-      res.json(jsonOutput);
+      DesiredTemperature.findOne({name: "desiredTemp"}, {}, {}, function(err, temp) {
+
+        var desiredTemp = Math.round(temp.temperatureC* 100)/100; 
+
+        var jsonOutput = {"temperature": temperature, "humidity": humidity, "desiredtemp" : desiredTemp}; 
+        res.json(jsonOutput);
+      });
+
     });
   });
 
