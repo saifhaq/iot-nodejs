@@ -76,13 +76,15 @@ router.get('/latest/desiredtemp', function(req, res, next) {
   });
 });
 
+
 router.post('/update/desiredtemp/:tempC', function(req, res, next){
  
+  console.log("NOTHING WORKS");
   var username = req.body.username; 
   var password = req.body.password; 
   var updatedTempC = req.params.tempC;
 
-  
+  console.log("lol");
   user = new User({
     username: username,
     password: password,
@@ -90,6 +92,7 @@ router.post('/update/desiredtemp/:tempC', function(req, res, next){
 
 
   User.findOne({'username': username}, function(err, user){
+    console.log("lol");
     if (err){
       res.send("Some other error");
     }
