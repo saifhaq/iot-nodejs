@@ -17,11 +17,9 @@ router.get('/', function(req, res, next) {
   Temperature.findOne({}, {}, { sort: { 'date' : -1 } }, function(err, latestEntry) {
 
     var temperature = Math.round(latestEntry.temperatureC* 100)/100; 
-
     Humidity.findOne({}, {}, { sort: { 'date' : -1 } }, function(err, latestEntry) {   
       
       var humidity = Math.round(latestEntry.humidityP* 100)/100; 
-
 
       DesiredTemperature.findOne({name: "desiredTemp"}, {}, {}, function(err, temp) {
 
@@ -35,7 +33,7 @@ router.get('/', function(req, res, next) {
 
 });
 
-
+/* GET latest, as a JSON. */
 router.get('/latest', function(req, res, next) {
 
   Temperature.findOne({}, {}, { sort: { 'date' : -1 } }, function(err, latestEntry) {
@@ -59,6 +57,7 @@ router.get('/latest', function(req, res, next) {
 
 });
 
+/* GET latest temperature, as a JSON. */
 router.get('/latest/temperature', function(req, res, next) {
 
   Temperature.findOne({}, {}, { sort: { 'date' : -1 } }, function(err, latestEntry) {
@@ -69,6 +68,7 @@ router.get('/latest/temperature', function(req, res, next) {
   });
 });
 
+/* GET latest humidity, as a JSON. */
 router.get('/latest/humidity', function(req, res, next) {
 
   Humidity.findOne({}, {}, { sort: { 'date' : -1 } }, function(err, latestEntry) {
@@ -79,6 +79,7 @@ router.get('/latest/humidity', function(req, res, next) {
   });
 });
 
+/* GET latest desired temp, as a JSON. */
 router.get('/latest/desiredtemp', function(req, res, next) {
 
   DesiredTemperature.findOne({name: "desiredTemp"}, {}, {}, function(err, temp) {
@@ -89,14 +90,13 @@ router.get('/latest/desiredtemp', function(req, res, next) {
 });
 
 
+/* POST latest desired temperature checking user auth */
 router.post('/update/desiredtemp/:tempC', function(req, res, next){
  
-  console.log("NOTHING WORKS");
   var username = req.body.username; 
   var password = req.body.password; 
   var updatedTempC = req.params.tempC;
 
-  console.log("lol");
   user = new User({
     username: username,
     password: password,
@@ -128,6 +128,7 @@ router.post('/update/desiredtemp/:tempC', function(req, res, next){
   
 });
 
+/* POST new humidity and temperature, checking user auth */
 router.post('/new/:temperatureC/:humidityP', function(req, res, next){
  
   var username = req.body.username; 
@@ -178,6 +179,7 @@ router.post('/new/:temperatureC/:humidityP', function(req, res, next){
   
 });
 
+/* POST only new temperature, checking user auth */
 router.post('/new/temperature/:temperatureC', function(req, res, next){
  
   var username = req.body.username; 
@@ -218,6 +220,7 @@ router.post('/new/temperature/:temperatureC', function(req, res, next){
   
 });
 
+/* POST only new humidity, checking user auth */
 router.post('/new/humidity/:humidityP', function(req, res, next){
  
   var username = req.body.username; 
